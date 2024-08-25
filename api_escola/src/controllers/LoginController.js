@@ -1,4 +1,4 @@
-const Usuario = require('../models/Usuario')
+const User = require('../models/User')
 const { sign } = require('jsonwebtoken')
 const { compare } = require("bcrypt")
 
@@ -15,19 +15,19 @@ class LoginController {
                 return res.status(400).json({ erro: 'Informe a sua senha' })
             }
 
-            const usuario = await Usuario.findOne({
+            const user = await User.findOne({
                 where: { email: email }
             })
-            if (!usuario) {
+            if (!user) {
                 return res.status(404).json({ erro: 'Nenhum usuario corresponde ao email e senha informados' })
             }
-            const hashSenha = await compare(password, usuario.password)
+            const hashSenha = await compare(password, user.password)
 
             if(hashSenha === false) {
                 return res.status(400).json({mensagem: "Conta não encontrada."})
             }
 
-            const payload = { sub: usuario.id, email: usuario.email, nome: usuario.nome }
+            const payload = { sub: user.id, email: user.email, nome: user.nome }
 
             const token = sign(payload, process.env.SECRET_JWT)
 
