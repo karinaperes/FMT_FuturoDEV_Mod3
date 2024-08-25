@@ -1,5 +1,8 @@
-const { DataTypes } = require ('sequelize')
-const { connection } = require ('../database/connection')
+const { connection } = require('../database/connection')
+const { DataTypes } = require('sequelize')
+const User = require('./User')
+const UserRole = require('./UserRole')
+
 
 const Role = connection.define('role', {
     id: {
@@ -9,19 +12,18 @@ const Role = connection.define('role', {
     },
     description: {
         type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
+        unique: true
     },
     createdAt: {
         type: DataTypes.DATE,
-        defaultValue: Date.now()        
+        defaultValue: Date.now()
     },
     updatedAt: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE       
     }
 })
 
-User.belongsToMany(Role, {through: Userrole})
+User.belongsToMany(Role, {through: UserRole})
 Role.belongsToMany(User, {through: UserRole})
 
 module.exports = Role

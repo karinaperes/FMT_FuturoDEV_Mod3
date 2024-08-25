@@ -1,33 +1,35 @@
-const { DataTypes } = require ('sequelize')
-const { connection } = require ('../database/connection')
+const { DataTypes } =require('sequelize')
+const { connection } = require('../database/connection')
+const Permission = require('./Permission')
+const Role = require('./Role')
 
 const PermissionRole = connection.define('permissionsRole', {
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
+        primaryKey: true
     },
     permissionId: {
-        type: DataTypes.INTEGER,        
+        type: DataTypes.INTEGER,
         references: {
             model: Permission,
             key: 'id'
         }
     },
     roleId: {
-        type: DataTypes.INTEGER,        
+        type: DataTypes.INTEGER,
         references: {
             model: Role,
             key: 'id'
         }
-    },    
+    },
     createdAt: {
         type: DataTypes.DATE,
-        defaultValue: Date.now()    
+        defaultValue: Date.now()
     },
     updatedAt: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE       
     }
-})
+})  
 
-module.export = PermissionRole
+module.exports = PermissionRole
