@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const userController = require('../controllers/UserController')
-// const { hasPermission } = require('../middleware/hasPermission')
+const { hasPermission } = require('../middleware/hasPermission')
 
 const userRouter = new Router()
 
