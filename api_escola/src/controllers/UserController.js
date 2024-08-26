@@ -1,5 +1,5 @@
 const User = require('../models/User')
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 class UserController {
     async findAll(req, res) {
@@ -33,12 +33,12 @@ class UserController {
                 return res.status(400).send({ message: 'Usuário já cadastrado' })
             }
 
-            // const senhaEncriptada = await bcrypt.hash(password, 10)
+            const senhaEncriptada = await bcrypt.hash(password, 10)
 
             const data = await User.create({
                 email,
                 name,
-                password
+                password: senhaEncriptada
             })
 
             return res.status(201).send(data)
