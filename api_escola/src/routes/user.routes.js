@@ -4,10 +4,10 @@ const { hasPermission } = require('../middleware/hasPermission')
 
 const userRouter = new Router()
 
-userRouter.get('/', userController.findAll)
-userRouter.get('/:id', userController.findById)
+userRouter.get('/', hasPermission(['ler_usuarios']), userController.findAll)
+userRouter.get('/:id', hasPermission(['ler_usuarios']), userController.findById)
 userRouter.post('/', userController.createNewUser)
-userRouter.put('/:id', userController.updateUser)
-userRouter.delete('/:id', userController.deleteUser)
+userRouter.put('/:id', hasPermission(['editar_usuario']), userController.updateUser)
+userRouter.delete('/:id', hasPermission(['remover_usuario']), userController.deleteUser)
 
 module.exports = userRouter
