@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken')
+const PermissionRole = require('../models/PermissionRole')
+const Permission = require('../models/Permission')
 
 function hasPermission(permissions) {
     return async (req, res, next) => {
@@ -14,17 +16,21 @@ function hasPermission(permissions) {
         const decoded = jwt.verify(token, process.env.SECRET_JWT)
         req.payload = decoded
 
+        if (!Array.isArray(req.payload.roles)) {
+            return res.status(400).send({ message: 'Roles não encontradas ou formato inválido' });
+        }
+
         try {
             const roles = await PermissionRole.findAll({
                 where: {
-                    roleId: req.payload.roles.map((id) => roles.id)
+                    roleId: req.payload.roles.map((role) => role.id)
                 },
                 attributes: ['permissionId'],
-                include: [{ model: Permission }]
+                include: [{ model: Permission, as: 'permissions' }]
             })
 
-            const existPermission = roles.some((role) => {
-                const hasPermission = role.peermissions.some((permissao) => {
+            const existPermission = roles.some((item) => {
+                const hasPermission = item.permissions.some((permissao) => {
                     return permissions.includes(permissao.description)
                 })
 
