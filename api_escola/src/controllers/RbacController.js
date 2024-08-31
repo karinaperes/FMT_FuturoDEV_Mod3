@@ -3,7 +3,6 @@ const Role = require('../models/Role')
 const PermissionRole = require('../models/PermissionRole')
 const User = require('../models/User')
 const UserRole = require('../models/UserRole')
-const { permission } = require('process')
 
 class RbacController {
     async listPermissions(req, res) {
