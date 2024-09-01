@@ -27,7 +27,7 @@ class LoginController {
                 return res.status(400).json({mensagem: "Conta não encontrada."})
             }
 
-            const payload = { sub: user.id, email: user.email, nome: user.nome }
+            const payload = { sub: user.id, email: user.email, name: user.name }
 
             const token = sign(payload, process.env.SECRET_JWT)
 
