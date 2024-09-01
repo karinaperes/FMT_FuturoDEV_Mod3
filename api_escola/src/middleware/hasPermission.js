@@ -11,31 +11,35 @@ function hasPermission(permissions) {
         const token = req.headers.authorization
         if (!token) {
             return res.status(401).send({ message: 'Token não encontrado' })
-        }
+        }        
 
         const decoded = jwt.verify(token, process.env.SECRET_JWT)
-        req.payload = decoded
-
-        if (!Array.isArray(req.payload.roles)) {
-            return res.status(400).send({ message: 'Roles não encontradas ou formato inválido' });
-        }
+        req.payload = decoded    
+        
+        console.log(req.payload)
 
         try {
-            const roles = await PermissionRole.findAll({
+            const roles = await PermissionRole.findAll({                
                 where: {
                     roleId: req.payload.roles.map((role) => role.id)
                 },
                 attributes: ['permissionId'],
                 include: [{ model: Permission, as: 'permissions' }]
             })
+            
+            console.log(JSON.stringify(roles, null, 2))
 
             const existPermission = roles.some((item) => {
+                
                 const hasPermission = item.permissions.some((permissao) => {
-                    return permissions.includes(permissao.description)
+                    return permissions.includes(permissao.description)      
+                    
                 })
 
-                return hasPermission
-            })
+                console.log(hasPermission)
+                
+                return hasPermission                
+            })              
 
             if (!existPermission) {
                 return res.status(401).send({ message: 'Você não tem permissão' })
@@ -44,9 +48,10 @@ function hasPermission(permissions) {
             next()
         } catch (error) {
             console.log(error)
-            return res.status(401).send({ message: 'Autenticação falhou', cause: error.message })
+            return res.status(401).send({ message: 'Autenticação falhou', cause: error.message })            
         }
     }
+    
 }
 
 module.exports = { hasPermission }
