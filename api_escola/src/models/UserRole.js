@@ -32,4 +32,7 @@ const UserRole = connection.define('usersRole', {
     }
 })
 
+User.belongsToMany(Role, {through: UserRole})
+Role.belongsToMany(User, {through: UserRole})
+
 module.exports = UserRole
